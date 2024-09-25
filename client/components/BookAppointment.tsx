@@ -1,92 +1,109 @@
+'use client';
 import { useState } from 'react';
 import { Container, Box, Heading, Text, Flex, FormControl, FormLabel, Input, Textarea, Button } from '@chakra-ui/react';
-import { FaUser, FaCalendar, FaStethoscope } from 'react-icons/fa';
+import { FaUser, FaPhone, FaList } from 'react-icons/fa';
+import axios from 'axios';
 
-const DoctorAppointmentForm = () => {
-  const [patientName, setPatientName] = useState('');
-  const [appointmentDateTime, setAppointmentDateTime] = useState('');
-  const [appointmentReason, setAppointmentReason] = useState('');
+const RequestForm = () => {
+  const [name, setName] = useState('');
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [request, setRequest] = useState('');
+  const [result, setResult] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleScheduleAppointment = async (e: React.ChangeEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const sendEmail = async () => {
+  try {
+    const response = await fetch('/api/emails', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: name,
+        phoneNumber: phoneNumber,
+        request: request
+      })
+    });
 
-    try {
-      const response = await fetch('/api/send-email', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ patientName, appointmentDateTime, appointmentReason }),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        alert(data.message);
-      } else {
-        alert('Appointment scheduling failed. Please try again later.');
-      }
-    } catch (error) {
-      console.error(error);
-      alert('Appointment scheduling failed. Please try again later.');
+    if (!response.ok) {
+      throw new Error(`Request failed with status ${response.status}`);
     }
-  };
+
+    const data = await response.json(); // Assuming server returns JSON
+    setResult({ message: data.message }); // Update result state with message
+  } catch (error) {
+    setResult({ error: error.message });
+  } finally {
+    setLoading(false);
+  }
+};
+
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  setLoading(true); // Show loading state
+  const data = new FormData(event.target)
+
+  const response = await fetch('/api/contact' , {
+    method: 'post',
+    body: data,
+  });
+};
+
 
   return (
     <Container maxW="lg" p={{ base: 5, md: 10 }}>
       <Heading as="h2" size="lg" mb="2" fontWeight="bold" textAlign="left">
-        Schedule an Appointment
+        Do a Request
       </Heading>
       <Text fontSize="md" color="teal.500" mb="6" textAlign="left">
-        Your health is our priority. Please fill in the details below to schedule your appointment.
+        Your health is our priority. Please fill in the details below.
       </Text>
-      <Box as="form" borderRadius="lg" boxShadow="lg" p="8" mx="auto" maxW="md" onSubmit={handleScheduleAppointment}>
+      <Box as="form" borderRadius="lg" boxShadow="lg" p="8" mx="auto" maxW="md" onSubmit={handleSubmit}>
         <FormControl mb="4">
           <Flex align="center">
-            <FormLabel htmlFor="patientName">
-              <Box as={FaUser} mr="2" />
-              Patient Name
+            <FormLabel htmlFor="name">
+              Name
             </FormLabel>
           </Flex>
           <Input
             type="text"
-            id="patientName"
-            placeholder="Enter patient's name"
+            id="name"
+            placeholder="Enter your name"
             size="lg"
             focusBorderColor="teal.400"
-            value={patientName}
-            onChange={(e) => setPatientName(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
         </FormControl>
         <FormControl mb="4">
           <Flex align="center">
-            <FormLabel htmlFor="appointmentDateTime">
-              <Box as={FaCalendar} mr="2" />
-              Appointment Date and Time
+            <FormLabel htmlFor="phoneNumber">
+              Phone Number
             </FormLabel>
           </Flex>
           <Input
-            type="datetime-local"
-            id="appointmentDateTime"
+            type="tel" // Set input type to phone number
+            id="phoneNumber"
+            placeholder="Enter your phone number"
             size="lg"
             focusBorderColor="teal.400"
-            value={appointmentDateTime}
-            onChange={(e) => setAppointmentDateTime(e.target.value)}
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
           />
         </FormControl>
         <FormControl mb="4">
           <Flex align="center">
-            <FormLabel htmlFor="appointmentReason">
-              <Box as={FaStethoscope} mr="2" />
-              Reason for Appointment
+            <FormLabel htmlFor="request">
+              Request
             </FormLabel>
           </Flex>
           <Textarea
-            id="appointmentReason"
-            placeholder="Enter the reason for the appointment"
+            id="request"
+            placeholder="Enter your request"
             size="lg"
             focusBorderColor="teal.400"
-            value={appointmentReason}
-            onChange={(e) => setAppointmentReason(e.target.value)}
+            value={request}
+            onChange={(e) => setRequest(e.target.value)}
           />
         </FormControl>
         <Button
@@ -95,16 +112,24 @@ const DoctorAppointmentForm = () => {
           size="lg"
           mt="4"
           w="100%"
+          isLoading={loading} // Disable button and show loading state
         >
-          Schedule Appointment
+          Submit Request
         </Button>
-        <Text mt="2" fontSize="sm" textAlign="center">
-          We respect your privacy. Your information is safe with us.
-        </Text>
+        {result.error && (
+          <Text mt="2" fontSize="sm" color="red.500" textAlign="center">
+            Error: {result.error}
+          </Text>
+        )}
+        {result.success && (
+          <Text mt="2" fontSize="sm" color="green.500" textAlign="center">
+            {result.success}
+          </Text>
+        )}
       </Box>
     </Container>
   );
 };
 
-export default DoctorAppointmentForm;
+export default RequestForm;
 

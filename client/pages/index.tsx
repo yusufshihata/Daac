@@ -7,9 +7,6 @@ import Stats from '../components/Stats';
 import AppointmentFeatures from '../components/AppointmentFeatures';
 import FAQ from '../components/Faq';
 import Testimonials from '../components/Testimonials';
-import MedicalCalculators from '../components/MedicalCalculators';
-import HealthTips from '../components/HealthTips';
-import Quotes from '../components/Quotes';
 import BookAppointment from '../components/BookAppointment';
 import Footer from '../components/Footer';
 
@@ -25,12 +22,6 @@ const Home: NextPage = () => {
           <AppointmentFeatures />
           <FAQ />
           <Testimonials />
-          <MedicalCalculators />
-          <HealthTips />
-          <Quotes />
-          <div id="BookAppointment">
-          <BookAppointment />
-          </div>
           <Footer />
         </Box>
       </main>

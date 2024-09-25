@@ -12,11 +12,31 @@ import {
 import { IoMdMedkit, IoIosMedkit, IoIosHeart, IoIosBody } from 'react-icons/io';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
+import  { useEffect, useState } from 'react';
 
 const Products = () => {
   const { colorMode } = useColorMode();
 
-  const products = [
+  const [data, setData] = useState([])
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch('http://127.0.0.1:8000/api/products');
+        const result = await res.json();
+        console.log(result.body); // Check the data in the console
+        setData(result); // Make sure this matches your data structure
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    }
+
+  fetchData();
+  }, []);
+
+  console.log(data);
+
+  let products = [
     {
       title: 'Medical Consultation',
       description: 'Expert medical advice and consultation for your health concerns.',

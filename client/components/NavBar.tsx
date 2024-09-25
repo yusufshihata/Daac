@@ -75,11 +75,11 @@ export default function NavBar() {
             fontWeight={600}
             color={'white'}
             bg={'teal.400'}
-            href={'#BookAppointment'}
+            href={'/products'}
             _hover={{
               bg: 'teal.500',
             }}>
-            Book Appointment
+            See our Products
           </Button>
         </Stack>
       </Flex>
@@ -254,18 +254,6 @@ const NAV_ITEMS: Array<NavItem> = [
   },
   {
     label: '|',
-  },
-  {
-    label: 'Calculators',
-    href: '/calculator',
-  },
-  {
-    label: 'Food',
-    href: '/food',
-  },
-  {
-    label: 'Articles',
-    href: '/articles',
   },
 ];
 

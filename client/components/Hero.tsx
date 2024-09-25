@@ -65,17 +65,6 @@ export default function Hero() {
               bg={'teal.400'}
               _hover={{ bg: 'teal.500' }}
             >
-              <Link href='#BookAppointment'>
-                Book Appointment
-              </Link>
-            </Button>
-            <Button
-              rounded={'full'}
-              size={'lg'}
-              fontWeight={'normal'}
-              px={6}
-              leftIcon={<IoMdOptions h={4} w={4} color={'gray.300'}>Products</IoMdOptions>}
-            >
               <Link href='/products'>
                 Products
               </Link>
