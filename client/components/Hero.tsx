@@ -35,7 +35,7 @@ export default function Hero() {
               as={'span'}
               position={'relative'}
               _after={{
-                content: "''",
+                content: '"\\0027\\0027"',
                 width: 'full',
                 height: '30%',
                 position: 'absolute',
@@ -53,7 +53,7 @@ export default function Hero() {
             </Text>
           </Heading>
           <Text color={'gray.500'} fontSize="lg">
-            Our team's mission is to make quality medicine for animals, because we believe that the animal's health is very important for human health.
+            Our team&apos;s mission is to make quality medicine for animals, because we believe that the animal&apos;s health is very important for human health.
           </Text>
           <Stack spacing={{ base: 4, sm: 6 }} direction={{ base: 'column', sm: 'row' }}>
             <Button
