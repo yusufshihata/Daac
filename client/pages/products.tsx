@@ -8,56 +8,31 @@ import {
   useColorMode,
   Button,
   Link,
+  ColorModeScript,
+  Image
 } from '@chakra-ui/react';
 import { IoMdMedkit, IoIosMedkit, IoIosHeart, IoIosBody } from 'react-icons/io';
 import NavBar from '../components/NavBar';
 import Footer from '../components/Footer';
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import products from '../products.json';
 
 const Products = () => {
   const { colorMode } = useColorMode();
 
-  const [data, setData] = useState([])
-
-  useEffect(() => {
-    async function fetchData() {
-      try {
-        const res = await fetch('http://127.0.0.1:8000/api/products');
-        const result = await res.json();
-        console.log(result.body); // Check the data in the console
-        setData(result); // Make sure this matches your data structure
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      }
+  /*const products = [
+    {
+      title: 'Oxival',
+      description: 'نتكيتيشبشيبسيشب',
+      icon: './assets/animals.jpg',
+    },
+    {
+      title: 'Oxival -4',
+      description: 'sdfasdfsfasdfs',
+      icon: './assets/animals.jpg',
     }
+  ];*/
 
-  fetchData();
-  }, []);
-
-  console.log(data);
-
-  let products = [
-    {
-      title: 'Medical Consultation',
-      description: 'Expert medical advice and consultation for your health concerns.',
-      icon: <IoMdMedkit size="2em" />,
-    },
-    {
-      title: 'Diagnostic Tests',
-      description: 'Comprehensive diagnostic tests to accurately assess your health condition.',
-      icon: <IoIosMedkit size="2em" />,
-    },
-    {
-      title: 'Specialized Treatments',
-      description: 'Tailored treatment plans for various medical conditions.',
-      icon: <IoIosHeart size="2em" />,
-    },
-    {
-      title: 'Preventive Care',
-      description: 'Guidance and products to maintain good health and prevent illnesses.',
-      icon: <IoIosBody size="2em" />,
-    },
-  ];
 
   return (
     <Box>
@@ -81,9 +56,14 @@ const Products = () => {
               borderWidth="1px"
               borderColor={colorMode === 'light' ? 'gray.200' : 'gray.600'}
             >
-              <Flex justify="center" mb={4}>
-                {products.icon}
-              </Flex>
+              <Image
+                src={products.image}
+                alt="Product Image"
+                boxSize={150}
+                borderRadius='10'
+                width='full'
+              />
+              
               <Heading size="md" mb={2} color={colorMode === 'light' ? 'gray.800' : 'white'}>
                 {products.title}
               </Heading>
@@ -93,16 +73,6 @@ const Products = () => {
             </Box>
           ))}
         </SimpleGrid>
-        <Flex justify="center" mt={8}>
-          <Button
-            as={Link}
-            href="/#BookAppointment" 
-            colorScheme="teal"
-            size="lg"
-          >
-            Book Appointment
-          </Button>
-        </Flex>
       </Box>
       <Footer />
     </Box>
